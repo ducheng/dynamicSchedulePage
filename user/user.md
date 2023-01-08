@@ -5,43 +5,128 @@
 ```
 <dependency>
   <groupId>com.github.ducheng</groupId>
-  <artifactId>dynamic-redis-spring-boot-starter</artifactId>
-  <version>0.0.2</version>
+  <artifactId>dynamic-schedule-spring-boot-starter</artifactId>
+  <version>0.0.3</version>
 </dependency>
 ```
 
 
 
-## 1.2 在配置文件配置多数据源
+# 1.2 在springboot 的启动类加上@EnableDynamicScheduling
 
-```properties
-# 是否开启多数据源
-spring.redis.enable-multi=true
-spring.redis.multi.default.host=你的ip
-spring.redis.multi.default.host.password="你的密码"
-spring.redis.multi.default.port=你的端口
-spring.redis.multi.test.host=你的ip
-spring.redis.multi.test.port=你的端口
-spring.redis.multi.test.host.password="你的密码" 这里的test 就是数据源的名称
+```java
+@SpringBootApplication
+//开启动态定时任务的注解
+@EnableDynamicScheduling
+public class SpringFastfdsApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringFastfdsApplication.class, args);
+	}
+
+}
 ```
 
 # 1.3  使用案例
 
-## 1.3.1  之前的springboot 整合redis 应该怎么配置就怎么配置，这里只演示使用注解的方式
+## 1.3.1  之前的springboot 整合Schedule 改怎么使用就怎么使用
 
 ## 1.3.2 代码片段
 
 ```java
 
-	@Autowired
-	RedisTemplate redisTemplate;
+@Component
+public class ScheduleTest {
 
-	@GetMapping("/test")
-	@RdbSelect(dataSource = "test", db = 10)
-	public String test() {
-		redisTemplate.opsForValue().set("k1","v1");
-		return "test";
-	}
+    @DynamicScheduled(desc = "测试",cron = "${cron.test}" )
+    public void test(){
+        System.out.printf("当前时间"+new Date());
+    }
+
+}
 
 ```
 
+```properties
+cron.test=0 0/2 * * * ?
+
+#2.6 及其以上的版本会报循环引用， 要把这个开关设置为true 
+spring.main.allow-circular-references=true
+```
+
+## 1.3.3  启动日志
+
+![1](1.png)
+
+# 1.4 对外暴露的api 
+
+## 1.4.1 查询定时任务列表
+
+请求接口  get 方式请求 http://ip:port/path/dynamicSchedule/getList
+
+返回结果：
+
+```json
+[
+    {
+        "desc": "测试",
+        "cronExpression": "0 0/2 * * * ?",
+        "taskId": "scheduleTest_test",
+        "status": false
+    }
+]
+```
+
+我们看到这个定时任务的状态是默认关闭的， status 为false
+
+
+
+## 1.4.2  执行一次定时任务
+
+请求接口  get 方式请求 http://ip:port/path/dynamicSchedule/startOnce/{taskId}
+
+taskId 就是上面getlist 返回的
+
+返回结果：
+
+![2](2.png)
+
+## 1.4.3  开启定时任务
+
+请求接口  get 方式请求 http://ip:port/path/dynamicSchedule/startScheduleTask/{taskId}
+
+taskId 就是上面getlist 返回的
+
+返回结果
+
+![3](3.png)
+
+## 1.4.4  取消定时任务
+
+请求接口  get 方式请求 http://ip:port/path/dynamicSchedule/removeCronTask/{taskId}
+
+taskId 就是上面getlist 返回的
+
+返回结果
+
+![4](4.png)
+
+
+
+## 1.4.5  修改定时任务
+
+请求接口  post  方式请求 http://ip:port/path/dynamicSchedule/updateSchedule
+
+请求参数 ：
+
+```json
+{
+
+     "cronExpression": "0 0/5 * * * ?",
+        "taskId": "scheduleTest_test"
+}
+```
+
+返回结果
+
+![5](5.png)
