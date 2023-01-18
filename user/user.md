@@ -83,7 +83,7 @@ spring.main.allow-circular-references=true
 
 ## 1.4.2  执行一次定时任务
 
-请求接口  get 方式请求 http://ip:port/path/dynamicSchedule/startOnce/{taskId}
+请求接口  get 方式请求 http://ip:port/path/dynamicSchedule/startOne/{taskId}
 
 taskId 就是上面getlist 返回的
 
