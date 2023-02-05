@@ -6,7 +6,7 @@
 <dependency>
   <groupId>com.github.ducheng</groupId>
   <artifactId>dynamic-schedule-spring-boot-starter</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
 </dependency>
 ```
 
@@ -49,9 +49,6 @@ public class ScheduleTest {
 
 ```properties
 cron.test=0 0/2 * * * ?
-
-#2.6 及其以上的版本会报循环引用， 要把这个开关设置为true 
-spring.main.allow-circular-references=true
 ```
 
 ## 1.3.3  启动日志
