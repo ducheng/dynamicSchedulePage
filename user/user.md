@@ -59,6 +59,8 @@ cron.test=0 0/2 * * * ?
 
 ##  1.4.1 管理界面查询
 
+查询地址：  http://ip:port/dynamicSchedule/getAll
+
 ![1](2.png)
 
 ## 1.4.2 管理界面编辑
