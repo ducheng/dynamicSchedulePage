@@ -6,7 +6,7 @@
 <dependency>
   <groupId>com.github.ducheng</groupId>
   <artifactId>dynamic-schedule-spring-boot-starter</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.7</version>
 </dependency>
 ```
 
@@ -55,75 +55,13 @@ cron.test=0 0/2 * * * ?
 
 ![1](1.png)
 
-# 1.4 对外暴露的api 
+# 1.4 管理界面
 
-## 1.4.1 查询定时任务列表
+##  1.4.1 管理界面查询
 
-请求接口  get 方式请求 http://ip:port/path/dynamicSchedule/getList
+![1](2.png)
 
-返回结果：
-
-```json
-[
-    {
-        "desc": "测试",
-        "cronExpression": "0 0/2 * * * ?",
-        "taskId": "scheduleTest_test",
-        "status": false
-    }
-]
-```
-
-我们看到这个定时任务的状态是默认关闭的， status 为false
-
-
-
-## 1.4.2  执行一次定时任务
-
-请求接口  get 方式请求 http://ip:port/path/dynamicSchedule/startOne/{taskId}
-
-taskId 就是上面getlist 返回的
-
-返回结果：
-
-![2](2.png)
-
-## 1.4.3  开启定时任务
-
-请求接口  get 方式请求 http://ip:port/path/dynamicSchedule/startScheduleTask/{taskId}
-
-taskId 就是上面getlist 返回的
-
-返回结果
+## 1.4.2 管理界面编辑
 
 ![3](3.png)
 
-## 1.4.4  取消定时任务
-
-请求接口  get 方式请求 http://ip:port/path/dynamicSchedule/removeCronTask/{taskId}
-
-taskId 就是上面getlist 返回的
-
-返回结果
-
-![4](4.png)
-
-
-
-## 1.4.5  修改定时任务
-
-请求接口  post  方式请求 http://ip:port/path/dynamicSchedule/updateSchedule
-
-请求参数 ：
-
-```json
-{
-
-     "cronExpression": "0 0/5 * * * ?",
-        "taskId": "scheduleTest_test"
-}
-```
-
-返回结果
-
-![5](5.png)
